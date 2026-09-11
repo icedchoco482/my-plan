@@ -1,4 +1,6 @@
 const STORAGE_KEY = 'academicTasks_v2';
+const AUTH_KEY = 'planAuthVerified';
+const AUTH_PASSWORD = '201989';
 
 const CATEGORY_META = {
   '实习':     { color:'#E23D0A' },
@@ -99,11 +101,12 @@ const els = {
   priorityFilter:$('priorityFilter'), searchInput:$('searchInput'), gridBtn:$('gridBtn'),
   timelineBtn:$('timelineBtn'), gridView:$('gridView'), timelineView:$('timelineView'),
   emptyState:$('emptyState'), statTotal:$('statTotal'), statDone:$('statDone'),
-  statPending:$('statPending'), statPercent:$('statPercent'), ringFg:$('ringFg'), toast:$('toast')
+  statPending:$('statPending'), statPercent:$('statPercent'), ringFg:$('ringFg'), toast:$('toast'),
+  authOverlay:$('authOverlay'), authInput:$('authInput'), authBtn:$('authBtn'), authError:$('authError')
 };
 
 /* ---------- 初始化 ---------- */
-renderCategoryTabs(); bindEvents(); render();
+renderCategoryTabs(); bindEvents(); initAuth();
 
 function bindEvents(){
   els.openAddBtn.addEventListener('click', () => openModal());
@@ -122,6 +125,33 @@ function bindEvents(){
   els.timelineBtn.addEventListener('click', () => switchView('timeline'));
   els.gridView.addEventListener('click', handleCardAction);
   els.timelineView.addEventListener('click', handleCardAction);
+}
+
+/* ---------- 访问口令 ---------- */
+function initAuth(){
+  els.authBtn.addEventListener('click', handleAuth);
+  els.authInput.addEventListener('keydown', e => { if(e.key==='Enter') handleAuth(); });
+  if(sessionStorage.getItem(AUTH_KEY) === '1'){
+    unlock();
+  } else {
+    els.authOverlay.classList.remove('hidden');
+    setTimeout(()=>els.authInput.focus(), 100);
+  }
+}
+function handleAuth(){
+  if(els.authInput.value.trim() === AUTH_PASSWORD){
+    sessionStorage.setItem(AUTH_KEY, '1');
+    els.authError.textContent = '';
+    unlock();
+  } else {
+    els.authError.textContent = '口令错误，请重新输入';
+    els.authInput.value = '';
+    els.authInput.focus();
+  }
+}
+function unlock(){
+  els.authOverlay.classList.add('hidden');
+  render();
 }
 
 function renderCategoryTabs(){
