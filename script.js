@@ -1,4 +1,6 @@
-const STORAGE_KEY = 'academicTasks_v2';
+const SUPABASE_URL = 'https://ntqewofaddwrmaoibqfcfm.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50cWVvZmFkZHdybWFvaWJxZmNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxMTc4NDUsImV4cCI6MjEwNDY5Mzg0NX0.2ZlefHc7KZSeWux2lcYmHLlaXCj_58ajttKWbeCnVlg';
+const TABLE = 'tasks';
 const AUTH_KEY = 'planAuthVerified';
 const AUTH_PASSWORD = '201989';
 
@@ -80,16 +82,76 @@ function getDefaultTasks(){
 }
 
 /* ---------- 状态 ---------- */
-let tasks = loadTasks();
+let tasks = [];
 let currentView = 'grid';
 let filters = { category:'all', priority:'all', search:'' };
 
-function loadTasks(){
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if(raw){ try{ return JSON.parse(raw); }catch(e){} }
-  return getDefaultTasks();
+/* ---------- Supabase 数据访问 ---------- */
+function supabaseHeaders(body){
+  const h = {
+    'apikey': SUPABASE_KEY,
+    'Authorization': `Bearer ${SUPABASE_KEY}`
+  };
+  if(body !== undefined) h['Content-Type'] = 'application/json';
+  return h;
 }
-function saveTasks(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks)); }
+async function supabaseRequest(path, options = {}){
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    ...options,
+    headers: { ...supabaseHeaders(options.body), ...(options.headers || {}) }
+  });
+  if(!res.ok){
+    const text = await res.text().catch(()=> '');
+    throw new Error(`Supabase ${res.status}: ${text}`);
+  }
+  return res;
+}
+function toRow(t){
+  return {
+    id: t.id, title: t.title || '', category: t.category || '', priority: t.priority || '中',
+    deadline: t.deadline || null, note: t.note || '', completed: !!t.completed
+  };
+}
+function fromRow(r){
+  return {
+    id: r.id, title: r.title || '', category: r.category || '', priority: r.priority || '中',
+    deadline: r.deadline || '', note: r.note || '', completed: !!r.completed,
+    createdAt: r.created_at || Date.now()
+  };
+}
+async function loadTasks(){
+  const res = await supabaseRequest(`${TABLE}?select=*`);
+  const rows = await res.json();
+  if(rows && rows.length) return rows.map(fromRow);
+  const defaults = getDefaultTasks();
+  await supabaseRequest(TABLE, {
+    method: 'POST',
+    body: JSON.stringify(defaults.map(toRow)),
+    headers: { 'Prefer': 'return=minimal' }
+  });
+  return defaults;
+}
+async function createTaskRemote(t){
+  await supabaseRequest(TABLE, {
+    method: 'POST',
+    body: JSON.stringify(toRow(t)),
+    headers: { 'Prefer': 'return=minimal' }
+  });
+}
+async function updateTaskRemote(id, t){
+  const row = toRow(t); delete row.id;
+  await supabaseRequest(`${TABLE}?id=eq.${encodeURIComponent(id)}`, {
+    method: 'PATCH',
+    body: JSON.stringify(row),
+    headers: { 'Prefer': 'return=minimal' }
+  });
+}
+async function deleteTaskRemote(id){
+  await supabaseRequest(`${TABLE}?id=eq.${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+    headers: { 'Prefer': 'return=minimal' }
+  });
+}
 
 /* ---------- DOM ---------- */
 const $ = id => document.getElementById(id);
@@ -106,7 +168,19 @@ const els = {
 };
 
 /* ---------- 初始化 ---------- */
-renderCategoryTabs(); bindEvents(); initAuth();
+init();
+
+async function init(){
+  renderCategoryTabs();
+  bindEvents();
+  try {
+    tasks = await loadTasks();
+  } catch(e) {
+    console.error('加载云端任务失败，回退到本地默认数据', e);
+    tasks = getDefaultTasks();
+  }
+  initAuth();
+}
 
 function bindEvents(){
   els.openAddBtn.addEventListener('click', () => openModal());
@@ -277,13 +351,15 @@ function renderStats(){
 /* ---------- 增删改 ---------- */
 function toggleComplete(id){
   const t=tasks.find(x=>x.id===id); if(!t) return;
-  t.completed=!t.completed; saveTasks(); render();
+  t.completed=!t.completed; render();
   toast(t.completed?'任务已完成 ✓':'已标记为未完成');
+  updateTaskRemote(id, t).catch(err=>console.error(err));
 }
 function deleteTask(id){
   const t=tasks.find(x=>x.id===id); if(!t) return;
   if(!confirm(`确定删除「${t.title}」？`)) return;
-  tasks=tasks.filter(x=>x.id!==id); saveTasks(); render(); toast('任务已删除');
+  tasks=tasks.filter(x=>x.id!==id); render(); toast('任务已删除');
+  deleteTaskRemote(id).catch(err=>console.error(err));
 }
 function openModal(id){
   els.taskForm.reset();
@@ -306,9 +382,14 @@ function handleSubmit(e){
   if(!title){ toast('请输入任务标题'); return; }
   const data={ title, category:els.taskCategoryInput.value, priority:els.taskPriorityInput.value,
     deadline:els.taskDeadlineInput.value, note:els.taskNoteInput.value.trim() };
-  if(id){ const t=tasks.find(x=>x.id===id); if(t) Object.assign(t,data); toast('任务已更新'); }
-  else { tasks.push({ id:uid(), completed:false, createdAt:Date.now(), ...data }); toast('任务已创建'); }
-  saveTasks(); closeModal(); render();
+  if(id){
+    const t=tasks.find(x=>x.id===id); if(t){ Object.assign(t,data); updateTaskRemote(id, t).catch(err=>console.error(err)); }
+    toast('任务已更新');
+  } else {
+    const nt={ id:uid(), completed:false, createdAt:Date.now(), ...data };
+    tasks.push(nt); createTaskRemote(nt).catch(err=>console.error(err)); toast('任务已创建');
+  }
+  closeModal(); render();
 }
 
 /* ---------- Toast ---------- */
