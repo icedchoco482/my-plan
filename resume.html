@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>毛盈盈 · 简历</title>
+<style>
+:root{
+  --paper:#F4F0E8; --ink:#1C1A1E; --ink-soft:#4A4550;
+  --orange:#E23D0A; --lilac:#B69CE3; --lilac-soft:#E4DAF5;
+  --serif:Georgia,"Times New Roman","Songti SC","STSong","SimSun",serif;
+  --sans:"Helvetica Neue",Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#1C1A1E;font-family:var(--sans);color:var(--ink);padding:40px 16px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+.toolbar{max-width:210mm;margin:0 auto 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.toolbar a,.toolbar button{font-family:inherit;font-size:.85rem;font-weight:600;padding:9px 18px;border-radius:999px;border:2px solid var(--lilac);background:transparent;color:var(--lilac);cursor:pointer;text-decoration:none;}
+.toolbar button{background:var(--orange);border-color:var(--orange);color:#fff;}
+
+.sheet{max-width:210mm;margin:0 auto;background:var(--paper);padding:14mm 16mm;box-shadow:0 30px 80px -30px rgba(0,0,0,.8);}
+
+.head{text-align:center;padding-bottom:12px;border-bottom:2px solid var(--ink);margin-bottom:14px;}
+.name{font-family:var(--serif);font-size:2.3rem;font-weight:700;letter-spacing:6px;color:var(--orange);line-height:1.15;}
+.role{font-size:.9rem;color:var(--ink-soft);margin-top:4px;letter-spacing:1px;}
+.contact{font-size:.82rem;color:var(--ink-soft);margin-top:8px;}
+.contact b{color:var(--ink);font-weight:600;}
+.contact span+span::before{content:" | ";color:var(--lilac);margin:0 4px;}
+
+section{margin-bottom:14px;}
+.sec-title{display:flex;align-items:stretch;margin-bottom:8px;background:var(--lilac-soft);}
+.sec-title h2{font-family:var(--serif);font-size:1rem;font-weight:700;letter-spacing:2px;color:#fff;background:var(--orange);padding:4px 14px;white-space:nowrap;}
+.sec-title::after{content:"";flex:1;}
+
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;}
+.row h3{font-size:.95rem;font-weight:700;}
+.row h3 small{font-weight:500;color:var(--ink-soft);font-size:.85rem;margin-left:6px;}
+.meta{font-size:.82rem;color:var(--ink-soft);text-align:right;white-space:nowrap;}
+.sub{font-size:.86rem;color:var(--ink-soft);margin-top:1px;}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;color:var(--orange);border:1.5px solid var(--orange);border-radius:999px;padding:0 8px;margin-left:6px;vertical-align:1px;}
+
+ul{padding-left:18px;margin-top:5px;font-size:.86rem;}
+li{margin-bottom:3px;}
+li::marker{color:var(--orange);}
+li b{font-weight:700;color:var(--ink);}
+.num{color:var(--orange);font-weight:700;}
+.item+.item{margin-top:10px;padding-top:10px;border-top:1px dashed rgba(28,26,30,.15);}
+.summary{font-size:.88rem;color:var(--ink-soft);}
+.skills li{margin-bottom:4px;}
+
+@media (max-width:640px){
+  .sheet{padding:26px 18px;}
+  .name{font-size:1.9rem;letter-spacing:4px;}
+  .meta{text-align:left;white-space:normal;}
+}
+@media print{
+  body{background:#fff;padding:0;}
+  .toolbar{display:none;}
+  .sheet{box-shadow:none;max-width:100%;padding:12mm 14mm;}
+  @page{size:A4;margin:0;}
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <a href="index.html">← 返回任务看板</a>
+  <button onclick="window.print()">打印 / 导出 PDF</button>
+</div>
+
+<div class="sheet">
+
+  <header class="head">
+    <div class="name">毛盈盈</div>
+    <div class="role">求职意向：数据分析实习生 · 新媒体运营实习生 · 运营数据分析</div>
+    <div class="contact">
+      <span><b>电话</b> 13667612137</span>
+      <span><b>邮箱</b> 请填写@example.com</span>
+      <span><b>所在地</b> 重庆</span>
+      <span><b>可实习时间</b> 2026.09 起 · 每周 4–5 天</span>
+    </div>
+  </header>
+
+  <section>
+    <div class="sec-title"><h2>个人总结</h2></div>
+    <p class="summary">
+      重庆工商大学经济统计学大四在读（2027 届应届）。具备扎实的统计学与数据分析基础，熟练使用 Excel / SPSS / Python 完成数据清洗、建模与可视化；先后参与全国大学生市场调查与分析大赛（校级二等奖）与全国大学生统计建模大赛，独立完成 10 万+ 条电商用户行为数据的转化与流失分析；同时独立运营万粉级小红书账号并实现商业变现。兼具「用数据说话」的分析能力与内容运营的实战经验，期望在数据分析 / 运营岗位中把两者结合起来创造价值。
+    </p>
+  </section>
+
+  <section>
+    <div class="sec-title"><h2>教育背景</h2></div>
+    <div class="row">
+      <h3>重庆工商大学 <small>经济统计学 · 本科</small></h3>
+      <div class="meta">2023.09 – 2027.06（预计）</div>
+    </div>
+    <ul>
+      <li><b>主修课程：</b>数据挖掘、多元统计分析、抽样调查理论与方法、国民经济核算、微观经济学、宏观经济学</li>
+      <li><b>荣誉奖项：</b>全国大学生市场调查与分析大赛 · 校级二等奖</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sec-title"><h2>竞赛与科研经历</h2></div>
+
+    <div class="item">
+      <div class="row">
+        <h3>全国大学生市场调查与分析大赛 <small>核心成员 · 数据分析与报告撰写</small><span class="tag">校级二等奖</span></h3>
+        <div class="meta">课题：重庆市银发助餐服务供需匹配与优化路径研究</div>
+      </div>
+      <ul>
+        <li><b>问卷设计与调研：</b>参与设计多维度供需匹配量表，深入社区发放并回收有效问卷 <span class="num">600+</span> 份，使用 SPSS 完成信度与效度检验。</li>
+        <li><b>供需缺口分析：</b>对助餐频次、价格接受度、空间便利性等变量进行多维交叉分析，构建「不满足度指数」，精准定位银发助餐在时空与价格上的失衡点。</li>
+        <li><b>报告撰写：</b>独立负责「供需匹配分析」核心章节，协同团队产出 <span class="num">20 页 / 1 万+ 字</span> 深度市调报告，为重庆本地老龄化服务优化提供策略参考。</li>
+      </ul>
+    </div>
+
+    <div class="item">
+      <div class="row">
+        <h3>全国大学生统计建模大赛 <small>核心成员 · 数据建模</small></h3>
+        <div class="meta">课题：我国基层医疗服务能力空间分异研究</div>
+      </div>
+      <ul>
+        <li><b>多源数据采集：</b>基于《中国卫生健康统计年鉴》及公开宏观数据，整理全国各省市基层医疗机构床位数、医护配比、年诊疗人次等 <span class="num">20+</span> 项面板指标。</li>
+        <li><b>空间分异建模：</b>运用多元线性回归构建综合评价体系，量化分析东、中、西部基层医疗服务能力差异及关键制约因素。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title"><h2>项目与实践经历</h2></div>
+
+    <div class="item">
+      <div class="row">
+        <h3>电商用户转化与流失预测分析 <small>个人项目 · 核心负责人</small></h3>
+        <div class="meta">数据来源：阿里云天池 / Kaggle 公开数据集</div>
+      </div>
+      <ul>
+        <li><b>数据清洗与整合：</b>使用 Excel 与 SPSS 对 <span class="num">10 万+</span> 条原始用户行为日志进行清洗、缺失值处理与异常值剔除。</li>
+        <li><b>特征工程与建模：</b>提取浏览时长、加购频次、近期活跃度等 <span class="num">15</span> 个核心特征，构建多维用户行为画像，定位流失关键节点并提出分层运营策略。</li>
+      </ul>
+    </div>
+
+    <div class="item">
+      <div class="row">
+        <h3>小红书个人 IP 运营 <small>独立创作者 & 负责人</small></h3>
+        <div class="meta">2024 – 至今</div>
+      </div>
+      <ul>
+        <li><b>定位与增长：</b>锁定垂直赛道，通过竞品分析与热点追踪打造 <span class="num">3 篇+ 千赞</span> 爆款笔记，短期内实现 <span class="num">万级粉丝</span> 冷启动。</li>
+        <li><b>内容生产与变现：</b>负责选题策划、脚本撰写、封面设计到文案输出的全链路生产；通过蒲公英平台及私域对接品牌广告合作，累计接单盈利 <span class="num">四位数</span>。</li>
+        <li><b>数据驱动迭代：</b>每日监控曝光量、点击率（CTR）与粉丝画像，通过标题 / 封面 A/B 测试将核心笔记转化率提升 <span class="num">25%</span>。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title"><h2>专业技能</h2></div>
+    <ul class="skills">
+      <li><b>数据分析：</b>Excel（函数、数据透视表、图表）、SPSS（信效度检验、显著性检验、回归分析）、Python（pandas 数据清洗、matplotlib 绘图）</li>
+      <li><b>统计方法：</b>抽样调查设计、多元统计分析、多元线性回归、数据挖掘基础</li>
+      <li><b>运营工具：</b>小红书创作者后台数据分析、蒲公英商单平台、A/B 测试</li>
+      <li><b>语言：</b>大学英语四级（CET-4），能阅读英文数据分析文档</li>
+    </ul>
+  </section>
+
+</div>
+</body>
+</html>

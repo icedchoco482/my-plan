@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>任务看板 · 时间线</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">Plan<span>.</span></div>
+      <p class="subtitle">学业 · 求职 · 备考 —— 按时间线与重要程度管理</p>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn btn-primary" id="openAddBtn">＋ 新建任务</button>
+    </div>
+  </header>
+
+  <section class="stats-bar">
+    <div class="stat-card"><div class="stat-value" id="statTotal">0</div><div class="stat-label">总任务</div></div>
+    <div class="stat-card"><div class="stat-value" id="statPending">0</div><div class="stat-label">待完成</div></div>
+    <div class="stat-card"><div class="stat-value" id="statDone">0</div><div class="stat-label">已完成</div></div>
+    <div class="stat-card progress-card">
+      <div class="progress-ring-wrap">
+        <svg viewBox="0 0 80 80" class="progress-ring">
+          <circle cx="40" cy="40" r="34" class="ring-bg"/>
+          <circle cx="40" cy="40" r="34" class="ring-fg" id="ringFg"/>
+        </svg>
+        <span class="progress-text" id="statPercent">0%</span>
+      </div>
+      <div class="stat-label">完成率</div>
+    </div>
+  </section>
+
+  <section class="controls">
+    <div class="search-wrap">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="searchInput" placeholder="搜索任务标题或备注…">
+    </div>
+    <div class="tabs" id="categoryTabs"></div>
+    <div class="right-controls">
+      <select id="priorityFilter" class="select">
+        <option value="all">全部重要程度</option>
+        <option value="紧急">紧急</option>
+        <option value="高">高</option>
+        <option value="中">中</option>
+        <option value="低">低</option>
+      </select>
+      <div class="view-toggle">
+        <button class="view-btn active" id="gridBtn">看板</button>
+        <button class="view-btn" id="timelineBtn">时间线</button>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <section id="gridView" class="task-grid"></section>
+    <section id="timelineView" class="timeline hidden"></section>
+    <div id="emptyState" class="empty-state hidden">
+      <div class="empty-icon">✦</div>
+      <p>暂无匹配的任务，换个筛选条件试试，或点击右上角新建一个吧～</p>
+    </div>
+  </main>
+
+</div>
+
+<!-- 新建 / 编辑任务弹窗 -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalTitle">新建任务</h2>
+      <button class="modal-close" id="modalCloseBtn">✕</button>
+    </div>
+    <form id="taskForm">
+      <input type="hidden" id="taskId">
+      <div class="form-group">
+        <label>任务标题</label>
+        <input type="text" id="taskTitle" required placeholder="例如：行测真题一套">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>分类</label>
+          <select id="taskCategory">
+            <option value="实习">实习</option>
+            <option value="求职秋招">求职秋招</option>
+            <option value="考编">考编</option>
+            <option value="考试">考试</option>
+            <option value="补考重修">补考重修</option>
+            <option value="论文">论文</option>
+            <option value="语言学习">语言学习</option>
+            <option value="学习方法">学习方法</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>重要程度</label>
+          <select id="taskPriority">
+            <option value="紧急">紧急</option>
+            <option value="高">高</option>
+            <option value="中" selected>中</option>
+            <option value="低">低</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>截止 / 计划日期（留空表示长期任务）</label>
+        <input type="date" id="taskDeadline">
+      </div>
+      <div class="form-group">
+        <label>备注详情</label>
+        <textarea id="taskNote" rows="3" placeholder="补充说明、方法或要点…"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" id="cancelBtn">取消</button>
+        <button type="submit" class="btn btn-primary">保存任务</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
